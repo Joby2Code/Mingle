@@ -79,7 +79,7 @@ sender_name varchar(30),
 receiver_name varchar(30),				
 relation_type varchar(20),					
 request_time timestamp,					
-request_status enum('Accepted','Declined'),								
+friendship_status varchar(20) NOT NULL,								
 foreign key (sender_name) references registered_employee(profile_name) 
 on delete cascade
 on update cascade,					

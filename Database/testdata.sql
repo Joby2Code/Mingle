@@ -40,12 +40,17 @@ call add_to_wall('post_5','gss383');
 call add_to_wall('post_6','ryk123');
 
 call insert_relationship('jj2196','gss383','T','2010-07-22 22:30:12','Accepted');
-call insert_relationship('jj2196','gss383','T','2010-07-22 22:30:12','Accepted');
+call insert_relationship('jj2196','ryk123','T','2012-07-22 22:30:12','Sent');
+call insert_relationship('jj2196','akk198','F','2013-07-22 22:30:12','Declined');
+call insert_relationship('jj2196','pns234','F','2010-07-22 22:30:12','Accepted');
+call insert_relationship('gss383','pns234','T','2010-07-22 22:30:12','Accepted');
+call insert_relationship('ryk123','gss383','T','2010-07-22 22:30:12','Sent');
 
 call insert_multimedia('mul_1','post_1','Miami Image','jpg',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','S');
 call insert_multimedia('mul_2','post_2','Florida image','jpg',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','P');
 call insert_multimedia('mul_3','post_1','Sunset beach','jpg',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','F');
 call insert_multimedia('mul_4','post_3','Curly fries','jpg',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','S');
+call insert_multimedia('mul_5','post_1','Miami Image','jpg',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','P');
 
 call insert_comments('cmnt_1','post_3','So cool!','2010-07-22 22:30:12','gss383','P');
 call insert_comments('cmnt_2','post_4','Let me join in','2010-09-21 04:30:29','ryk123','F');
@@ -53,6 +58,9 @@ call insert_comments('cmnt_3','post_5','Where is this!','2010-09-22 15:30:30','r
 call insert_comments('cmnt_4','post_5','How does this work?','2010-09-23 12:30:302','gpn967','P');
 call insert_comments('cmnt_5','post_5','Nice post man','2010-09-24 22:30:30','jj2196','P');
 call insert_comments('cmnt_6','post_2','Isnt it there already?','2010-09-25 12:30:30','jj2196','F');
+call insert_comments('cmnt_7','post_1','How was your conference?','2010-09-23 12:30:30','gpn967','P');
+call insert_comments('cmnt_8','post_1','Its good to see you here. We should meet','2010-09-24 22:30:30','jj2196','P');
+call insert_comments('cmnt_9','post_1','When is the conference?','2010-09-25 12:30:30','gss383','P');
 
 call insert_locations('loc_1','post_1','Miami Convention Center','Conference on AI for next generations','40.7587° N', '73.9787° W','P');
 call insert_locations('loc_2','post_2','Wall Street','Meeting for a tender passing','42.7217° N', '34.9787° W','F');
@@ -63,6 +71,13 @@ call insert_likes('like_1','post_1','mul_1','cmnt_1',NULL,'gss383','2010-07-22 2
 call insert_likes('like_2','post_2','mul_1','cmnt_1',NULL,'akk198','2010-08-12 16:45:45');
 call insert_likes('like_3','post_1','mul_1','cmnt_1',NULL,'akk198','2010-09-14 18:20:23');
 call insert_likes('like_4','post_2','mul_1','cmnt_1',NULL,'pns234','2010-09-22 19:35:19');
+call insert_likes('like_5','post_2','mul_2','cmnt_1',NULL,'pns234','2010-09-22 19:35:19');
+call insert_likes('like_6','post_3',NULL,NULL,NULL,'pns234','2010-09-22 19:35:19');
+call insert_likes('like_7','post_2','mul_2','cmnt_2',NULL,'pns234','2010-09-22 19:35:19');
+call insert_likes('like_8','post_2','mul_1',NULL,NULL,'pns234','2010-09-22 19:35:19');
+call insert_likes('like_9','post_4','mul_1',NULL,NULL,'pns234','2010-09-22 19:35:19');
+call insert_likes('like_10','post_2','mul_3','cmnt_1',NULL,'pns234','2010-09-22 19:35:19');
+
 
 #----------Testing------
 call employee_acc;
@@ -76,6 +91,7 @@ call  comment;
 call  location;
 call likes;
 
+select validate_user(742347663) as Status;
 
 
 #--- Update Table:

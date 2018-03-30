@@ -89,20 +89,21 @@ END $$
 
 
 #Procedure 6 request to connect with colleagues
+DROP PROCEDURE IF EXISTS `insert_relationship` $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_relationship`( 
 p_sender_name varchar(30),
 p_receiver_name varchar(20),
 p_relation varchar(20), 
 p_time_request_sent timestamp, 
-p_request_status enum('Accepted','Declined') 
+friendship_status varchar(20)
 )
 BEGIN 
 insert into relationship ( 
 sender_name , receiver_name , relation_type, 
-request_time, request_status
+request_time, friendship_status
 )
 Values
-(p_sender_name , p_receiver_name , p_relation , p_time_request_sent, p_request_status 
+(p_sender_name , p_receiver_name , p_relation , p_time_request_sent, friendship_status 
 ); 
 END $$
 
@@ -193,7 +194,7 @@ END $$
 
  
 #Procedure 13 : Read wall
-CREATE DEFINER=`root`@`localhost` PROCEDURE `read_wall `() 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `read_wall`() 
 BEGIN select * from wall;
 END $$
  
@@ -233,6 +234,7 @@ END $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `employee_signin`() 
 BEGIN select * from signin;
 END $$
+
 
 DELIMITER ;
 
