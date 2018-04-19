@@ -1,3 +1,5 @@
+#Dont use it for later on
+
 use Mingle;
 
 ALTER TABLE relationship CHANGE request_status request_status enum('Accepted','Declined','Sent');

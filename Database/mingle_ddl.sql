@@ -4,6 +4,7 @@ use Mingle;
 drop table if exists employee; 
 
 #Create employee table
+drop table if exists employee; 
 create table employee(
 ssn int primary key, email_id varchar(20) not null 
 );
@@ -13,17 +14,18 @@ drop table if exists signin;
 create table signin
 (
 ssn int unique, 
-password varchar(50) not null,			
+password varchar(50) not null,
+profile_name varchar(30) primary key,			
 foreign key (ssn) References employee(ssn) 
 on delete cascade											
 );
 
 #Create registered_employee  table
 drop table if exists registered_employee; 
+SET FOREIGN_KEY_CHECKS=1;
 create table registered_employee
 (
 profile_name varchar(30) primary key, 
-ssn int unique,
 first_name varchar(20) not null , 
 last_name varchar(20) not null,
 address varchar (255),
@@ -36,8 +38,7 @@ email_id varchar(50),
 profile_pic blob,
 gender enum('Male','Female'),
 access_id enum('P','T','F','S','FOF') default 'S',
-foreign key (ssn) References employee(ssn) 
-on delete cascade
+foreign key (profile_name) References signin(profile_name) 
 );
 
 

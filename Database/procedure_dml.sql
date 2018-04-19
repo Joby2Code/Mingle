@@ -20,43 +20,50 @@ END $$
 
 
 #Procedure 2: insert into signin table
+DROP PROCEDURE IF EXISTS `insert_signin_details` $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_signin_details`( 
 IN e_ssn int,
-IN e_password varchar(50)
+IN e_password varchar(50),
+IN e_profile varchar(30)
 )
 BEGIN
 INSERT INTO signin
 (
 ssn,
-password
+password,
+profile_name
 ) Values
 (
 e_ssn,
-e_password
+e_password,
+e_profile
 ); 
 END $$
 
 #Procedure 3: for inserting registered user
 DROP PROCEDURE IF EXISTS `insert_registered_employee` $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_registered_employee`(
-IN profile_name varchar(30),IN ssn int,
+IN profile_name varchar(30),
 IN first_name varchar(20),IN last_name varchar(20),IN address varchar(255),IN designation varchar(20),
 IN skills varchar(255),IN interests varchar(255),IN manager varchar(20),
 IN level enum('A','B','C','D'),IN email_id varchar(50),
 IN profile_pic blob,IN gender enum('Male','Female'),
-IN access_id enum('P','T','F','S','FOF')
+IN access_id enum('P','T','F','S','FOF'),
+IN create_time datetime
 )
 BEGIN
 INSERT INTO registered_employee
 (
-profile_name,ssn,first_name, last_name,address,designation,skills,
-interests,manager,level, email_id, profile_pic,gender,access_id
+profile_name,first_name, last_name,address,designation,skills,
+interests,manager,level, email_id, profile_pic,gender,access_id,profile_created
 ) Values
 (
-profile_name,ssn,first_name,last_name,address,designation,skills,interests,manager,level,
-email_id,profile_pic,gender,access_id
+profile_name,first_name,last_name,address,designation,skills,interests,manager,level,
+email_id,profile_pic,gender,access_id, create_time
 );
 END $$
+
+
 
 
 #Procedure 4: for inserting post
@@ -233,6 +240,32 @@ END $$
 #Procedure 20: View sign_in  table
 CREATE DEFINER=`root`@`localhost` PROCEDURE `employee_signin`() 
 BEGIN select * from signin;
+END $$
+
+
+
+
+#Procedure 21: for inserting registered user
+DROP PROCEDURE IF EXISTS `insert_profile_id` $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_profile_id`(
+IN profile_name varchar(30),
+IN email_id varchar(50),
+IN fname varchar(20),
+IN lname varchar(20),
+IN create_time datetime
+)
+BEGIN
+INSERT INTO registered_employee
+(
+profile_name,
+email_id,
+first_name,
+last_name,
+profile_created
+) Values
+(
+profile_name, email_id,fname,lname,create_time
+);
 END $$
 
 
