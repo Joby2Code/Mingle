@@ -6,7 +6,7 @@ html, body {
 body{
 	margin:0;
 	padding:0;
-	background:url(../images/bg.jpg);
+	background:url(../images_header/bg.jpg);
 	width:100%;
 	color:#959595;
 }
@@ -14,7 +14,7 @@ body{
 .main {
 	padding:0;
 	margin:0;
-	background:url(../images/main_bg.jpg) repeat-y center;
+	background:url(../images_header/main_bg.jpg) repeat-y center;
 }
 
 .wrapper{
