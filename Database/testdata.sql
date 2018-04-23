@@ -1,6 +1,6 @@
 use Mingle;
 
-call employee_acc_registration;
+
 
 call insert_employee(742347663,'jj2196@nyu.edu');
 call insert_employee(742347661,'gss383@nyu.edu');
@@ -8,21 +8,25 @@ call insert_employee(378092902,'pns234@nyu.edu');
 call insert_employee(407840577,'akk198@nyu.edu');
 call insert_employee(940237837,'ryk123@nyu.edu');
 call insert_employee(379486342,'gpn967@nyu.edu');
+call insert_employee(1111111111,'test@nyu.edu');
 
 
-call insert_signin_details(742347663,'password');
-call insert_signin_details(742347661,'password');
-call insert_signin_details(378092902,'password');
-call insert_signin_details(407840577,'password');
-call insert_signin_details(940237837,'password');
-call insert_signin_details(379486342,'password');
+call insert_signin_details(742347663,'password','jj2196');
+call insert_signin_details(742347661,'password','gss383');
+call insert_signin_details(378092902,'password','pns234');
+call insert_signin_details(407840577,'password','akk198');
+call insert_signin_details(940237837,'password','ryk123');
+call insert_signin_details(379486342,'password','gpn967');
 
-call insert_registered_employee('jj2196',742347663,'Joby','Joy','New York','Senior Engineer','Java Php','Dancing','Karl','A','jj2196@nyu.edu',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','Male','S');
-call insert_registered_employee('gss383',742347661,'Gauri','Sarode','New York','Senior Engineer','Python Php','Movies','Karl','A','gss383@nyu.edu',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','Female','P');
-call insert_registered_employee('pns234',378092902,'Pranav','Reddy','Bayridge','Data Engineer','Java React','Mingling','Gauri','B','pns23@nyu.edu',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','Male','S');
-call insert_registered_employee('akk198',407840577,'Arun','Kondani','Manhattan','Website developer','Python React','Cribbing','Gauri','B','akk198@nyu.edu',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','Male','P');
-call insert_registered_employee('ryk123',940237837,'Rahul','Keswani','Long Island','Data Scientist','React Php','Coding','Pranav','C','ryk123@nyu.edu',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','Male','S');
-call insert_registered_employee('gpn967',379486342,'Geetesh','Nikhade','Boston','Full stack developer','Python Java','Drinking','Pranav','C','gpn967@nyu.edu',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','Male','P');
+
+call insert_profile_id('test','test@nyu.edu','firstname','lastname','2010-07-22 22:30:12');
+
+call insert_registered_employee('jj2196','Joby','Joy','New York','Senior Engineer','Java Php','Dancing','Karl','A','jj2196@nyu.edu',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','Male','S');
+call insert_registered_employee('gss383','Gauri','Sarode','New York','Senior Engineer','Python Php','Movies','Karl','A','gss383@nyu.edu',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','Female','P');
+call insert_registered_employee('pns234','Pranav','Reddy','Bayridge','Data Engineer','Java React','Mingling','Gauri','B','pns23@nyu.edu',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','Male','S');
+call insert_registered_employee('akk198','Arun','Kondani','Manhattan','Website developer','Python React','Cribbing','Gauri','B','akk198@nyu.edu',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','Male','P');
+call insert_registered_employee('ryk123','Rahul','Keswani','Long Island','Data Scientist','React Php','Coding','Pranav','C','ryk123@nyu.edu',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','Male','S');
+call insert_registered_employee('gpn967','Geetesh','Nikhade','Boston','Full stack developer','Python Java','Drinking','Pranav','C','gpn967@nyu.edu',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','Male','P');
 
 
 call insert_post('post_1','2010-07-22 22:30:12','First post','Day one it is!',' ');
@@ -55,7 +59,7 @@ call insert_multimedia('mul_5','post_1','Miami Image','jpg',x'C9CBBBCCCEB9C8CABC
 call insert_comments('cmnt_1','post_3','So cool!','2010-07-22 22:30:12','gss383','P');
 call insert_comments('cmnt_2','post_4','Let me join in','2010-09-21 04:30:29','ryk123','F');
 call insert_comments('cmnt_3','post_5','Where is this!','2010-09-22 15:30:30','ryk123','F');
-call insert_comments('cmnt_4','post_5','How does this work?','2010-09-23 12:30:302','gpn967','P');
+call insert_comments('cmnt_4','post_5','How does this work?','2010-09-23 12:30:30','gpn967','P');
 call insert_comments('cmnt_5','post_5','Nice post man','2010-09-24 22:30:30','jj2196','P');
 call insert_comments('cmnt_6','post_2','Isnt it there already?','2010-09-25 12:30:30','jj2196','F');
 call insert_comments('cmnt_7','post_1','How was your conference?','2010-09-23 12:30:30','gpn967','P');
@@ -91,7 +95,13 @@ call  comment;
 call  location;
 call likes;
 
-select validate_user(742347663) as Status;
+
+# To retrieve all the post specific to user and his friends
+call post_retrieval('jj2196');
+
+select validate_user(542347663) as Status;
+
+
 
 
 #--- Update Table:

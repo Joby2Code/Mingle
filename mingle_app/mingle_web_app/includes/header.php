@@ -1,13 +1,12 @@
 <?php
 include 'config/db_config.php';
-include 'debugger.php';
+#include 'debugger.php';
 include ("includes/class/User.php");
 
 if (isset($_SESSION['profile_name'])) {
     $userLoggedIn = $_SESSION['profile_name'];
     $user_details_query = mysqli_query($con, "SELECT * FROM registered_employee WHERE profile_name='$userLoggedIn'");
     $user = mysqli_fetch_array($user_details_query);
-    debug_to_console($user);
 } else {
     header("Location: index.php");
 }
@@ -121,6 +120,3 @@ if (isset($_SESSION['profile_name'])) {
 		</div>
 	</div>
 
-</body>
-
-</html>
