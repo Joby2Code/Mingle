@@ -22,10 +22,19 @@ class User
     public function getFirstAndLastName()
     {
         $username = $this->user['profile_name'];
-        $query = mysqli_query($this->con, "SELECT first_name, last_name FROM registered_employee WHERE profile_name='$user'");
+        $query = mysqli_query($this->con, "SELECT first_name, last_name FROM registered_employee WHERE profile_name='$username'");
         $row = mysqli_fetch_array($query);
         return $row['first_name'] . " " . $row['last_name'];
     }
+    
+    
+    public function getProfilePic() {
+        $username = $this->user['profile_name'];
+        $query = mysqli_query($this->con, "SELECT profile_pic FROM registered_employee WHERE profile_name='$username'");
+        $row = mysqli_fetch_array($query);
+        return $row['profile_pic'];
+    }
+    
 }
 
 ?>

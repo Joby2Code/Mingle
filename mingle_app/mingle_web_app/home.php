@@ -31,7 +31,7 @@ echo "Likes: " . $user['num_likes'];
 				<textarea name="post_text" id="post_text"
 					placeholder="Got something to say?"></textarea>
 
-				<input type="submit" name="post" id="post_button" value="Post">
+				<input type="submit" name="post" id="submit_profile_post" value="Post">
 				<br>
 
 

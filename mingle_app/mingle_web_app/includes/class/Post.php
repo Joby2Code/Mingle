@@ -24,9 +24,9 @@ class Post
             $start = ($page - 1) * $limit;
         
             
-        $post_query = "select * from wall where profile_name = '$userLoggedIn' or profile_name in (select distinct receiver_name from relationship
-where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friendship_status = 'sent' and relation_type = 'T' or 'F'
-);";
+        $post_query = "select * from wall where profile_name = '$userLoggedIn' and deleted= 'no'or profile_name in (select distinct receiver_name from relationship
+where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friendship_status = 'sent' and (relation_type = 'T' or 'F')
+) and deleted='no';";
         #$post_query = "CALL post_retrieval('". $userLoggedIn ."')";
         
             
@@ -46,6 +46,7 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                     $user_to = "";
                 } else {
                     echo("<script>console.log(success...".$row['profile_name'].");</script>");
+                    echo("<script>console.log(Not found".$limit.");</script>");
                     $user_to_obj = new User($this->con, $row['profile_name']);
                     $user_to_name = $user_to_obj->getFirstAndLastName();
                     $user_to = "<a href='" . $row['profile_name'] . "'>" . $user_to_name . "</a>";
@@ -73,9 +74,9 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 $first_name = $user_row['first_name'];
                 $last_name = $user_row['last_name'];
                 $profile_pic = $user_row['profile_pic'];
-                echo("<script>console.log(".$last_name.");</script>");
+                #echo("<script>console.log(".$last_name.");</script>");
                 
-                ?>
+?>
 				<script> 
 						function toggle<?php echo $id; ?>() {
 
@@ -150,8 +151,7 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                         $time_message = $interval->s . " seconds ago";
                     }
                 }
-                echo("<script>console.log(".$time_message.");</script>");
-                
+               
                 $str .= "<div class='status_post' onClick='javascript:toggle$id()'>
 					       <div class='post_profile_pic'>
 						      <img src='$profile_pic' width='50'>
@@ -186,6 +186,7 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
 					$(document).ready(function() {
 
 						$('#post<?php echo $id; ?>').on('click', function() {
+							console.log('Inside the delete callback");
 							bootbox.confirm("Are you sure you want to delete this post?", function(result) {
 
 								$.post("includes/form_handlers/delete_post.php?post_id=<?php echo $id; ?>", {result:result});
@@ -199,9 +200,10 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
 
 					});
 
-				</script>
+			</script>
 <?php
             } // End while loop
+            
             
             if ($count > $limit)
                 $str .= "<input type='hidden' class='nextPage' value='" . ($page + 1) . "'>
@@ -213,3 +215,4 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
         echo $str;
     }
 }
+?>

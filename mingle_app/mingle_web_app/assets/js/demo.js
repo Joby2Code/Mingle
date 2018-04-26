@@ -12,7 +12,7 @@ $(document).ready(function() {
 
 	//Button for profile post
 	$('#submit_profile_post').click(function(){
-		
+		console.log('In posting profile');
 		$.ajax({
 			type: "POST",
 			url: "includes/handlers/ajax_submit_profile_post.php",

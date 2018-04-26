@@ -99,6 +99,8 @@ call likes;
 # To retrieve all the post specific to user and his friends
 call post_retrieval('jj2196');
 
+CALL post_retrieval('jj2196');
+
 select validate_user(542347663) as Status;
 
 
@@ -107,3 +109,7 @@ select validate_user(542347663) as Status;
 #--- Update Table:
 
 call update_post_table('post_1','2018-03-26 22:30:12','P');
+
+
+
+

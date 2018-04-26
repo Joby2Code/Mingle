@@ -19,8 +19,10 @@ if (isset($_SESSION['profile_name'])) {
 <title>Mingle</title>
 
 <!-- Javascript -->
+
+<!-- Upading new version for jquery -->
 <script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="assets/js/bootstrap.js"></script>
 <script src="assets/js/bootbox.min.js"></script>
 <script src="assets/js/demo.js"></script>
@@ -29,7 +31,7 @@ if (isset($_SESSION['profile_name'])) {
 
 <!-- mine -->
 
-<script type="text/javascript" src="assets/js/jquery-1.3.2.min.js"></script>
+
 <script type="text/javascript" src="assets/js/script.js"></script>
 <script type="text/javascript" src="assets/js/cufon-yui.js"></script>
 <script type="text/javascript" src="assets/js/arial.js"></script>
