@@ -48,8 +48,31 @@ $row = mysqli_fetch_array($user_query);
 
 $posted_to = $row['profile_name']; // this is the user on whose wall that post is posted on
 
+
+
+if(isset($_POST['postComment' . $post_id])) {
+
+    $post_body = $_POST['post_body'];
+    $post_body = mysqli_escape_string($con, $post_body);
+    $date_time_now = date("Y-m-d H:i:s");
+    
+    // Inserting into wall
+    $count_query = mysqli_query($con, "select count(*)  as curr_tot from comment");
+    
+    $row = mysqli_fetch_array($count_query);
+    
+    $comment_id = 'cmnt_' . ++ $row['curr_tot'];
+    
+    $insert_post = mysqli_query($con, "INSERT INTO comment VALUES ('$comment_id', '$post_id','$post_body', '$date_time_now','$userLoggedIn', 'P', 'no')");
+    
+    echo "<p>Comment Posted! </p>";
+}
+
 ?>
-	
+<form action="comment_frame.php?post_id=<?php echo $post_id; ?>" id="comment_form" name="postComment<?php echo $post_id; ?>" method="POST">
+		<textarea name="post_body"></textarea>
+		<input type="submit" name="postComment<?php echo $post_id; ?>" value="Post">
+</form>	
 	
 	
 	<!-- Load comments -->

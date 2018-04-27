@@ -1,6 +1,6 @@
 <?php
 
-class Post 
+class Post
 {
 
     private $user_obj;
@@ -23,14 +23,11 @@ class Post
         else
             $start = ($page - 1) * $limit;
         
-            
         $post_query = "select * from wall where profile_name = '$userLoggedIn' and deleted= 'no'or profile_name in (select distinct receiver_name from relationship
 where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friendship_status = 'sent' and (relation_type = 'T' or 'F')
-) and deleted='no';";
-        #$post_query = "CALL post_retrieval('". $userLoggedIn ."')";
+) and deleted='no' order by post_id DESC;";
+        // $post_query = "CALL post_retrieval('". $userLoggedIn ."')";
         
-            
-           
         $str = ""; // String to return
         $data_query = mysqli_query($this->con, $post_query);
         
@@ -45,12 +42,10 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 if ($row['profile_name'] == "none") {
                     $user_to = "";
                 } else {
-                    echo("<script>console.log(success...".$row['profile_name'].");</script>");
-                    echo("<script>console.log(Not found".$limit.");</script>");
+                    echo ("<script>console.log(success..." . $row['profile_name'] . ");</script>");
                     $user_to_obj = new User($this->con, $row['profile_name']);
                     $user_to_name = $user_to_obj->getFirstAndLastName();
                     $user_to = "<a href='" . $row['profile_name'] . "'>" . $user_to_name . "</a>";
-                   
                 }
                 
                 $user_logged_obj = new User($this->con, $userLoggedIn);
@@ -74,10 +69,10 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 $first_name = $user_row['first_name'];
                 $last_name = $user_row['last_name'];
                 $profile_pic = $user_row['profile_pic'];
-                #echo("<script>console.log(".$last_name.");</script>");
+                // echo("<script>console.log(".$last_name.");</script>");
                 
-?>
-				<script> 
+                ?>
+<script> 
 						function toggle<?php echo $id; ?>() {
 
 							var target = $(event.target);
@@ -99,10 +94,10 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 $post_title = $post_record['post_title'];
                 $post_desc = $post_record['post_desc'];
                 $post_date = $post_record['post_time'];
-                echo("<script>console.log(".$post_date.");</script>");
+                echo ("<script>console.log(" . $post_date . ");</script>");
                 $comments_check = mysqli_query($this->con, "SELECT * FROM comment WHERE post_id='$id'");
                 $comments_check_num = mysqli_num_rows($comments_check);
-                echo("<script>console.log(".$comments_check_num.");</script>");
+                echo ("<script>console.log(" . $comments_check_num . ");</script>");
                 // Timeframe
                 $date_time_now = date("Y-m-d H:i:s");
                 $start_date = new DateTime($post_date); // Time of post
@@ -151,7 +146,7 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                         $time_message = $interval->s . " seconds ago";
                     }
                 }
-               
+                
                 $str .= "<div class='status_post' onClick='javascript:toggle$id()'>
 					       <div class='post_profile_pic'>
 						      <img src='$profile_pic' width='50'>
@@ -162,10 +157,10 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
 									$delete_button
 						   </div>
 						  <div id='post_body'>
-									$post_title
+                                        $post_desc
 									<br>
 									<br>
-                                     $post_desc
+                                     
 									<br>
 						  </div>
 
@@ -181,7 +176,7 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
 						<hr>";
                 
                 ?>
-			<script>
+<script>
 
 					$(document).ready(function() {
 
@@ -204,7 +199,6 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
 <?php
             } // End while loop
             
-            
             if ($count > $limit)
                 $str .= "<input type='hidden' class='nextPage' value='" . ($page + 1) . "'>
 							<input type='hidden' class='noMorePosts' value='false'>";
@@ -214,40 +208,116 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
         
         echo $str;
     }
- #Mingle   
-    public function submitPost($body, $user_to) {
-        $body = strip_tags($body); //removes html tags
+
+    // Mingle
+    public function submitPost($body, $user_to)
+    {
+        $body = strip_tags($body); // removes html tags
         $body = mysqli_real_escape_string($this->con, $body);
-        $check_empty = preg_replace('/\s+/', '', $body); //Deltes all spaces 
+        $check_empty = preg_replace('/\s+/', '', $body); // Deltes all spaces
         
-        if($check_empty != "") {
+        if ($check_empty != "") {
             
             $body_array = preg_split("/\s+/", $body);
             
-            foreach($body_array as $key => $value) {
+            foreach ($body_array as $key => $value) {
                 
-                if(strpos($value, "www.youtube.com/watch?v=") !== false) {
+                if (strpos($value, "www.youtube.com/watch?v=") !== false) {
                     
                     $link = preg_split("!&!", $value);
                     $value = preg_replace("!watch\?v=!", "embed/", $link[0]);
-                    $value = "<br><iframe width=\'420\' height=\'315\' src=\'" . $value ."\'></iframe><br>";
+                    $value = "<br><iframe width=\'420\' height=\'315\' src=\'" . $value . "\'></iframe><br>";
                     $body_array[$key] = $value;
-                    
                 }
-                
             }
             
             $body = implode(" ", $body_array);
+            echo ("<script>console.log(" . $body . ");</script>");
+            // Current date and time
+            $date_added = date("Y-m-d H:i:s");
+            // Get username
+            $added_by = $this->user_obj->getUsername();
+            
+            // If user is on own profile, user_to is 'none'
+            if ($user_to == $added_by)
+                $user_to = $added_by;
+            
+                
+           
+            // Inserting into wall
+            $count_query = mysqli_query($this->con, "select count(*)  as curr_tot from wall");
+           
+            $row = mysqli_fetch_array($count_query);
+           
+            $post_id = 'post_' . ++ $row['curr_tot'];
             
             
+            
+            $query = mysqli_query($this->con, "INSERT INTO post VALUES('$post_id', '$date_added','','$body','P')");
+            $add_post_to_wall = mysqli_query($this->con, "INSERT INTO wall VALUES('$post_id','$user_to','no')");
+            
+           
+            
+            // Insert to Post table
+            
+           
+            $returned_id = mysqli_insert_id($this->con);
+            
+            echo ("<script>console.log(Mysql" . $returned_id . ");</script>");
+            $stopWords = "a about above across after again against all almost alone along already
+			 also although always among am an and another any anybody anyone anything anywhere are
+			 area areas around as ask asked asking asks at away b back backed backing backs be became
+			 because become becomes been before began behind being beings best better between big
+			 both but by c came can cannot case cases certain certainly clear clearly come could
+			 d did differ different differently do does done down down downed downing downs during
+			 e each early either end ended ending ends enough even evenly ever every everybody
+			 everyone everything everywhere f face faces fact facts far felt few find finds first
+			 for four from full fully further furthered furthering furthers g gave general generally
+			 get gets give given gives go going good goods got great greater greatest group grouped
+			 grouping groups h had has have having he her here herself high high high higher
+		     highest him himself his how however i im if important in interest interested interesting
+			 interests into is it its itself j just k keep keeps kind knew know known knows
+			 large largely last later latest least less let lets like likely long longer
+			 longest m made make making man many may me member members men might more most
+			 mostly mr mrs much must my myself n necessary need needed needing needs never
+			 new new newer newest next no nobody non noone not nothing now nowhere number
+			 numbers o of off often old older oldest on once one only open opened opening
+			 opens or order ordered ordering orders other others our out over p part parted
+			 parting parts per perhaps place places point pointed pointing points possible
+			 present presented presenting presents problem problems put puts q quite r
+			 rather really right right room rooms s said same saw say says second seconds
+			 see seem seemed seeming seems sees several shall she should show showed
+			 showing shows side sides since small smaller smallest so some somebody
+			 someone something somewhere state states still still such sure t take
+			 taken than that the their them then there therefore these they thing
+			 things think thinks this those though thought thoughts three through
+	         thus to today together too took toward turn turned turning turns two
+			 u under until up upon us use used uses v very w want wanted wanting
+			 wants was way ways we well wells went were what when where whether
+			 which while who whole whose why will with within without work
+			 worked working works would x y year years yet you young younger
+			 youngest your yours z lol haha omg hey ill iframe wonder else like
+             hate sleepy reason for some little yes bye choose";
+            
+            // Convert stop words into array - split at white space
+            $stopWords = preg_split("/[\s,]+/", $stopWords);
+            
+            // Remove all punctionation
+            $no_punctuation = preg_replace("/[^a-zA-Z 0-9]+/", "", $body);
+            
+            // Predict whether user is posting a url. If so, do not check for trending words
+            if (strpos($no_punctuation, "height") === false && strpos($no_punctuation, "width") === false && strpos($no_punctuation, "http") === false && strpos($no_punctuation, "youtube") === false) {
+                // Convert users post (with punctuation removed) into array - split at white space
+                $keywords = preg_split("/[\s,]+/", $no_punctuation);
+                
+                foreach ($stopWords as $value) {
+                    foreach ($keywords as $key => $value2) {
+                        if (strtolower($value) == strtolower($value2))
+                            $keywords[$key] = "";
+                    }
+                }
+            }
         }
-        
-        
-        
     }
-    
-    
-    
-    
 }
 ?>

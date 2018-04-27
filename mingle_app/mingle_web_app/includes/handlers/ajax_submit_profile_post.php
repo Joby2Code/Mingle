@@ -1,7 +1,7 @@
 <?php
 require '../../config/db_config.php';
-include("../classes/User.php");
-include("../classes/Post.php");
+include("../class/User.php");
+include("../class/Post.php");
 #Mingle
 
 
