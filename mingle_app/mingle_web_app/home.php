@@ -27,9 +27,11 @@ echo "Likes: " . $user['num_likes'];
 		</div>
 
 		<div class="main_column column">
-			<form class="post_form" action="home.php" method="POST">
-				<textarea name="post_text" id="post_text"
+			<form class="profile_post" action="home.php" method="POST">
+				<textarea name="post_body" id="post_text"
 					placeholder="Got something to say?"></textarea>
+				<input type="hidden" name="user_from" value="<?php echo $userLoggedIn; ?>">
+      			<input type="hidden" name="user_to" value="<?php echo $userLoggedIn; ?>">	
 
 				<input type="submit" name="post" id="submit_profile_post" value="Post">
 				<br>
