@@ -1,6 +1,6 @@
 <?php
 include 'config/db_config.php';
-#include 'debugger.php';
+// include 'debugger.php';
 include ("includes/class/User.php");
 
 if (isset($_SESSION['profile_name'])) {
@@ -88,14 +88,17 @@ if (isset($_SESSION['profile_name'])) {
 				<div class="clr"></div>
 				<div class="menu_nav">
 					<ul>
-						<li class="active">
+						<li>
 							<a href="home.php">
 								Home
 								<i class="fa fa-home fa-lg"></i>
 							</a>
 						</li>
 						<li>
-							<a href="profile.php">Profile</a>
+							<a href="<?php echo $userLoggedIn; ?>">
+				<?php echo $user['first_name']; ?>
+							</a>
+							<!--  <a href="profile.php">Profile</a> -->
 
 						</li>
 						<li>
@@ -121,4 +124,3 @@ if (isset($_SESSION['profile_name'])) {
 
 		</div>
 	</div>
-
