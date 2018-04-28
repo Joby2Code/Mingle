@@ -2,11 +2,23 @@
 include("includes/header.php");
 
 if(isset($_GET['profile_username'])) {
+	$friendship_status = 'None'
     $username = $_GET['profile_username'];
     $user_details_query = mysqli_query($con, "SELECT * FROM registered_employee WHERE profile_name='$username'");
     $user_array = mysqli_fetch_array($user_details_query);
-    
-   
+    $user_sent = mysqli_query($con, "SELECT * FROM relationship WHERE sender_name='$username' AND receiver_name='$userLoggedIn'");
+	$user_received = mysqli_query($con, "SELECT * FROM relationship WHERE sender_name='$userLoggedIn' AND receiver_name='$username'");
+	if(mysqli_num_rows($user_sent) == 0 && mysqli_num_rows($user_received) == 0)
+	{
+		$friendship_status = 'Send request';
+	}
+	else if(mysqli_num_rows($user_received) == 0)
+	{
+		$friendship_status = 'Request sent';
+	}
+	else{
+		$friendship_status = 'Respond to request';
+	}
 }
 
 ?>
@@ -30,7 +42,7 @@ if(isset($_GET['profile_username'])) {
 			<div class="user_details_left_right">
 				<a href="<?php echo $userLoggedIn; ?>">
 			<?php
-echo $user_array['first_name'] . " " . $user_array['last_name'];
+			echo $user_array['first_name'] . " " . $user_array['last_name'];
 
 ?>
 			</a>
@@ -46,6 +58,7 @@ echo $user_array['first_name'] . " " . $user_array['last_name'];
 		<form action="<?php echo $username; ?>" method="POST">
 		</form>
  		<input type="submit" class="deep_blue" data-toggle="modal" data-target="#post_form" value="Post Something">
+		<input type="submit"  value= <?php echo $friendship_status; ?>>
 		
  	</div>
  	
@@ -120,7 +133,6 @@ echo $user_array['first_name'] . " " . $user_array['last_name'];
  	<!-- Loading posts specific to user-->
 
  <!-- Modal -->
-
 <!-- Modal -->
 <div class="modal fade" id="post_form" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
   <div class="modal-dialog">
