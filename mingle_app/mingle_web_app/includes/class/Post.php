@@ -98,6 +98,19 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 $comments_check = mysqli_query($this->con, "SELECT * FROM comment WHERE post_id='$id'");
                 $comments_check_num = mysqli_num_rows($comments_check);
                 echo ("<script>console.log(" . $comments_check_num . ");</script>");
+                
+                // Adding multimedia contents
+                $multimedia_check = mysqli_query($this->con, "SELECT * FROM  multimedia_content WHERE post_id='$id' and deleted='no'");
+                $multimedia_record = mysqli_fetch_array($multimedia_check);
+                $multimedia_check_num = mysqli_num_rows($multimedia_check);
+                echo ("<script>console.log(" . $multimedia_check_num . ");</script>");
+                $multimedia_title = '';
+                $multmedia_content = '';
+                if ($multimedia_check_num > 0) {
+                    $multimedia_title = $multimedia_record['multimedia_name'];
+                    $multmedia_content = $multimedia_record['multimedia_content'];
+                }
+                
                 // Timeframe
                 $date_time_now = date("Y-m-d H:i:s");
                 $start_date = new DateTime($post_date); // Time of post
@@ -159,8 +172,8 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
 						  <div id='post_body'>
                                         $post_desc
 									<br>
-									<br>
-                                     
+									<br>$multimedia_title
+                                     <br>$multmedia_content
 									<br>
 						  </div>
 
@@ -312,28 +325,25 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
             }
         }
     }
-    
-    
-  # specific to the user profile --> 
-    
-    public function loadProfilePosts($data, $limit) {
-        
+
+    // specific to the user profile -->
+    public function loadProfilePosts($data, $limit)
+    {
         echo ("<script>console.log(In function" . $profileUser . ");</script>");
         $page = $data['page'];
         $profileUser = $data['profileUsername'];
         $userLoggedIn = $this->user_obj->getUsername();
         
-        if($page == 1)
+        if ($page == 1)
             $start = 0;
         else
             $start = ($page - 1) * $limit;
-       
-        $str = ""; //String to return 
+        
+        $str = ""; // String to return
         echo ("<script>console.log(" . $profileUser . ");</script>");
         $post_query = "select * from wall where profile_name = '$profileUser' and deleted= 'no' order by post_id DESC;";
-    
-        $data_query = mysqli_query($this->con,$post_query);
         
+        $data_query = mysqli_query($this->con, $post_query);
         
         if (mysqli_num_rows($data_query) > 0) {
             $num_iterations = 0; // Number of results checked (not necasserily posted)
@@ -355,27 +365,27 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 $user_logged_obj = new User($this->con, $userLoggedIn);
                 if ($num_iterations ++ < $start)
                     continue;
-                    
-                    // Once 10 posts have been loaded, break
-                    if ($count > $limit) {
-                        break;
-                    } else {
-                        $count ++;
-                    }
-                    
-                    if ($userLoggedIn == $added_by)
-                        $delete_button = "<button class='delete_button btn-danger' id='$id'>X</button>";
-                        else
-                            $delete_button = "";
-                            
-                            $user_details_query = mysqli_query($this->con, "SELECT first_name, last_name, profile_pic FROM registered_employee WHERE profile_name='$added_by'");
-                            $user_row = mysqli_fetch_array($user_details_query);
-                            $first_name = $user_row['first_name'];
-                            $last_name = $user_row['last_name'];
-                            $profile_pic = $user_row['profile_pic'];
-                            // echo("<script>console.log(".$last_name.");</script>");
-                            
-                            ?>
+                
+                // Once 10 posts have been loaded, break
+                if ($count > $limit) {
+                    break;
+                } else {
+                    $count ++;
+                }
+                
+                if ($userLoggedIn == $added_by)
+                    $delete_button = "<button class='delete_button btn-danger' id='$id'>X</button>";
+                else
+                    $delete_button = "";
+                
+                $user_details_query = mysqli_query($this->con, "SELECT first_name, last_name, profile_pic FROM registered_employee WHERE profile_name='$added_by'");
+                $user_row = mysqli_fetch_array($user_details_query);
+                $first_name = $user_row['first_name'];
+                $last_name = $user_row['last_name'];
+                $profile_pic = $user_row['profile_pic'];
+                // echo("<script>console.log(".$last_name.");</script>");
+                
+                ?>
 <script> 
 						function toggle<?php echo $id; ?>() {
 
@@ -402,6 +412,19 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 $comments_check = mysqli_query($this->con, "SELECT * FROM comment WHERE post_id='$id'");
                 $comments_check_num = mysqli_num_rows($comments_check);
                 echo ("<script>console.log(" . $comments_check_num . ");</script>");
+                
+                // Adding multimedia contents
+                $multimedia_check = mysqli_query($this->con, "SELECT * FROM  multimedia_content WHERE post_id='$id' and deleted='no'");
+                $multimedia_record = mysqli_fetch_array($multimedia_check);
+                $multimedia_check_num = mysqli_num_rows($multimedia_check);
+                echo ("<script>console.log(" . $multimedia_check_num . ");</script>");
+                $multimedia_title = '';
+                $multmedia_content = '';
+                if ($multimedia_check_num > 0) {
+                    $multimedia_title = $multimedia_record['multimedia_name'];
+                    $multmedia_content = $multimedia_record['multimedia_content'];
+                }
+                
                 // Timeframe
                 $date_time_now = date("Y-m-d H:i:s");
                 $start_date = new DateTime($post_date); // Time of post
@@ -460,13 +483,15 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
 							     <a href='$added_by'> $first_name $last_name </a> &nbsp;&nbsp;&nbsp;$time_message
 									$delete_button
 						   </div>
-						  <div id='post_body'>
+                            
+                           <div id='post_body'>
                                         $post_desc
 									<br>
-									<br>
-                                     
+									<br>$multimedia_title
+                                     <br>$multmedia_content
 									<br>
 						  </div>
+						  
 
 				          <div class='newsfeedPostOptions'>
 								     Comments($comments_check_num)&nbsp;&nbsp;&nbsp;
@@ -511,9 +536,6 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
         }
         
         echo $str;
-        
-    
     }
-    
 }
 ?>

@@ -102,10 +102,10 @@ if (isset($_SESSION['profile_name'])) {
 
 						</li>
 						<li>
-							<a href="friend.html">Friends</a>
+							<a href="requests.php">Friends</a>
 						</li>
 						<li>
-							<a href="settings.html">
+							<a href="settings.php">
 								Settings
 								<i class="fa fa-cog fa-lg"></i>
 							</a>

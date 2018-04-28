@@ -2,8 +2,9 @@
 include("includes/header.php"); //Header 
 ?>
 
-<div class="main_column column" id="main_column">
-
+<div class="main">
+	<div class="content_resize">
+	<div class="main_column column">
 	<h4>Friend Requests</h4>
 
 	<?php  
@@ -19,7 +20,7 @@ include("includes/header.php"); //Header
 			
 			echo $user_from_obj->getFirstAndLastName() . " sent you a friend request!";
 
-			$user_from_friend_array = $user_from_obj->getFriendArray();
+			#$user_from_friend_array = $user_from_obj->getFriendArray();
 
 			if(isset($_POST['accept_request' . $user_from ])) {
 				$add_friend_query = mysqli_query($con, "UPDATE relationship SET friendship_status= 'Accepted' WHERE receiver_name='$userLoggedIn' AND sender_name= '$user_from'");
@@ -73,11 +74,17 @@ include("includes/header.php"); //Header
 				$user_from_obj = new User($con, $user_from);
 				echo $user_from_obj->getFirstAndLastName() . "<br>"; 
 			}
-			while($row = mysqli_fetch_array($receiverquery)) {
+			while($row = mysqli_fetch_array($senderquery)) {
 				$user_from = $row['receiver_name'];
 				$user_from_obj = new User($con, $user_from);
 				echo $user_from_obj->getFirstAndLastName() . "<br>";
 			}
 		}
 	?>
+	</div>
 </div>
+</div>
+
+<?php
+include 'includes/footer.php';
+?>
