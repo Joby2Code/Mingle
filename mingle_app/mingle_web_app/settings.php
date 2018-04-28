@@ -3,7 +3,10 @@ include("includes/header.php");
 include("includes/form_handlers/settings_handler.php");
 ?>
 
-<div class="main_column column">
+<div class="main">
+	<div class="content_resize">
+	
+	<div class="main_column column">
 
 	<h4>Account Settings</h4>
 	<?php
@@ -50,4 +53,7 @@ include("includes/form_handlers/settings_handler.php");
 	</form>
 
 
+</div>
+
+</div>
 </div>
