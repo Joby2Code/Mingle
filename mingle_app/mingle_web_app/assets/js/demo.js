@@ -12,12 +12,13 @@ $(document).ready(function() {
 
 	//Button for profile post
 	$('#submit_profile_post').click(function(){
-		
+		console.log('In posting profile');
 		$.ajax({
 			type: "POST",
 			url: "includes/handlers/ajax_submit_profile_post.php",
-			data: $('form.profile_post').serialize(),
+			data: $('form.post_form').serialize(),
 			success: function(msg) {
+				console.log(msg);
 				$("#post_form").modal('hide');
 				location.reload();
 			},

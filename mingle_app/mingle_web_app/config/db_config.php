@@ -7,6 +7,7 @@ $password = "password";
 $db = "mingle";
 
 ob_start();
+@
 session_start();
 
 $con = mysqli_connect($server, $username, $password, $db);

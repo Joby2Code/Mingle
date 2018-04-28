@@ -277,12 +277,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `post_retrieval`(
 IN profile_name varchar(30)
 )
 BEGIN
-(
-select * from wall
-where profile_name = profile_name or profile_name in 
-(select distinct receiver_name from relationship
-where sender_name = profile_name and friendship_status = 'Accepted' or friendship_status = 'sent' and relation_type = 'T' or 'F');
+
+select * 
+from wall
+where profile_name = profile_name or profile_name
+ in 
+(select distinct receiver_name 
+from relationship
+where sender_name = profile_name and friendship_status = 'Accepted' or friendship_status = 'sent' and relation_type = 'T' or 'F'
 );
+
 END $$
 
 

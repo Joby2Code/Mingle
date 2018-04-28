@@ -199,15 +199,14 @@ textarea:focus {
 }
 #comment_form input[type="submit"] {
 	border:none;
-	background-color: #20AAE5;
+	background-color: #a1a5a7;
 	color: #156588;
 	border-radius: 5px;
 	width: 13%;
 	height: 35px;
 	margin-top: 3px;
 	position: absolute;
-	font-family: 'Bellota-BoldItalic', sans-serif;
-	text-shadow: #73B6E2 0.5px 0.5px 0px;
+	text-shadow: #363738 0.5px 0.5px 0px;
 }
 
 .newsfeedPostOptions {
