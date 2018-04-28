@@ -44,8 +44,10 @@ echo "Likes: " . $user['num_likes'];
 				enctype="multipart/form-data" class="wall_post">
 				Select image to upload:
 				<input type="file" name="fileToUpload" id="fileToUpload">
+				
 				<br>
 				<input type="submit" value="Upload Image" name="submit_pic">
+				<input type="text" name="image_title" placeholder="Image Title" required>
 			</form>
 
 			<hr>
