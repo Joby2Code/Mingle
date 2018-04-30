@@ -52,9 +52,9 @@ select * from wall;
 
 #Query selects all the post to be displayed on the wall of the user and his friends
 select * from wall
-where profile_name = 'jj2196'  and access_id = 'T' or access_id='P' and deleted='no' or (profile_name in 
+where profile_name = 'jj2196'  and (access_id = 'T' or access_id='P') and deleted='no' or (profile_name in 
 (select distinct receiver_name from relationship
-where sender_name = 'jj2196' and friendship_status = 'Accepted' or friendship_status = 'sent' and relation_type = 'T' or 'F')) and deleted='no' ;
+where sender_name = 'jj2196' and friendship_status = 'Accepted' or friendship_status = 'sent' and relation_type = 'T' or 'F') and deleted='no'  and (access_id = 'T' or access_id='P'));
 
 select distinct receiver_name from relationship
 where sender_name = 'jj2196' and friendship_status = 'Accepted' or friendship_status = 'sent' and relation_type = 'T' or 'F';
@@ -74,7 +74,7 @@ select count(distinct like_id) as tot_likes,viewer_name from likes where post_id
 
 
 select * from likes;
-select * from wall;
+select * from wall where profile_name='jj2196' and deleted='no';
 
 INSERT INTO likes VALUES('like_11','post_1',null,null,null,'jj2196',' 2018-02-02 09:10:30');
 
