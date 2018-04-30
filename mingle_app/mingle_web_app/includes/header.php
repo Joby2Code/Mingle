@@ -7,6 +7,14 @@ if (isset($_SESSION['profile_name'])) {
     $userLoggedIn = $_SESSION['profile_name'];
     $user_details_query = mysqli_query($con, "SELECT * FROM registered_employee WHERE profile_name='$userLoggedIn'");
     $user = mysqli_fetch_array($user_details_query);
+    
+    $post_details_query = mysqli_query($con, "select count(post_id) as tot_post from wall where profile_name='$userLoggedIn' and deleted='no'");
+    $post = mysqli_fetch_array($post_details_query);
+    
+    $like_sql = "select count(l.like_id) as like_count from likes as l natural join wall  as w where l.post_id=w.post_id and w.profile_name='$userLoggedIn' and w.deleted='no';";
+    $like_query = mysqli_query($con, $like_sql);
+    $likes = mysqli_fetch_array($like_query);
+    
 } else {
     header("Location: index.php");
 }
@@ -28,6 +36,7 @@ if (isset($_SESSION['profile_name'])) {
 <script src="assets/js/demo.js"></script>
 <script src="assets/js/jquery.jcrop.js"></script>
 <script src="assets/js/jcrop_bits.js"></script>
+<script src="assets/js/utilities.js"></script>
 
 <!-- mine -->
 

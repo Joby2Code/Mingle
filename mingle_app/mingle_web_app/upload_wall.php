@@ -48,7 +48,7 @@ if(isset($_POST["submit_pic"])) {
     
     $query = mysqli_query($con, "INSERT INTO post VALUES('$post_id', '$date_added','','Multimedia','P')");
 
-    $add_post_to_wall = mysqli_query($con, "INSERT INTO wall VALUES('$post_id','$userLoggedIn','no')");
+    $add_post_to_wall = mysqli_query($con, "INSERT INTO wall VALUES('$post_id','$userLoggedIn','no','P')");
     
     
     

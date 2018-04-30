@@ -19,8 +19,8 @@ echo $user['first_name'] . " " . $user['last_name'];
 				<br>
 			<?php
 
-echo "Posts: " . $user['num_posts'] . "<br>";
-echo "Likes: " . $user['num_likes'];
+echo "Posts: " . $post['tot_post'] . "<br>";
+echo "Likes: " . $likes['like_count'];
 
 ?>
 		</div>
@@ -33,7 +33,11 @@ echo "Likes: " . $user['num_likes'];
 				<input type="hidden" name="user_from" value="<?php echo $userLoggedIn; ?>">
       			<input type="hidden" name="user_to" value="<?php echo $userLoggedIn; ?>">	
 
-				<input type="submit" name="post" id="submit_profile_post" value="Post">
+				<input type="submit" name="post" id="submit_profile_post" value="Post"><br>
+				<input type="radio" name="privacy" value="P" checked> Public
+  				<input type="radio" name="privacy" value="S"> Private
+  				<input type="radio" name="privacy" value="T"> Team
+				
 				<br>
 
 
@@ -57,32 +61,7 @@ echo "Likes: " . $user['num_likes'];
 
 		</div>
 
-		<div class="user_details column">
-
-			<h4>Popular</h4>
-
-			<div class="trends">
-			<?php
-$query = mysqli_query($con, "SELECT * FROM trends ORDER BY hits DESC LIMIT 9");
-
-foreach ($query as $row) {
-    
-    $word = $row['title'];
-    $word_dot = strlen($word) >= 14 ? "..." : "";
-    
-    $trimmed_word = str_split($word, 14);
-    $trimmed_word = $trimmed_word[0];
-    
-    echo "<div style'padding: 1px'>";
-    echo $trimmed_word . $word_dot;
-    echo "<br></div><br>";
-}
-
-?>
-		</div>
-
-
-		</div>
+		
 	</div>
 </div>
 <script>

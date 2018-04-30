@@ -6,6 +6,29 @@ include("includes/form_handlers/settings_handler.php");
 <div class="main">
 	<div class="content_resize">
 	
+	
+	<div class="user_details column">
+			<a href="<?php echo $userLoggedIn; ?>">
+				<img src="<?php echo $user['profile_pic']; ?>">
+			</a>
+
+			<div class="user_details_left_right">
+				<a href="<?php echo $userLoggedIn; ?>">
+			<?php
+echo $user['first_name'] . " " . $user['last_name'];
+
+?>
+			</a>
+				<br>
+			<?php
+
+			echo "Posts: " . $post['tot_post'] . "<br>";
+			echo "Likes: " . $likes['like_count'];
+
+?>
+		</div>
+		</div>
+	
 	<div class="main_column column">
 
 	<h4>Account Settings</h4>

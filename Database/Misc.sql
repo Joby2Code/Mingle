@@ -52,9 +52,9 @@ select * from wall;
 
 #Query selects all the post to be displayed on the wall of the user and his friends
 select * from wall
-where profile_name = 'jj2196' and deleted ='no' or profile_name in 
+where profile_name = 'jj2196'  and access_id = 'T' or access_id='P' and deleted='no' or (profile_name in 
 (select distinct receiver_name from relationship
-where sender_name = 'jj2196' and friendship_status = 'Accepted' or friendship_status = 'sent' and relation_type = 'T' or 'F') and deleted='no';
+where sender_name = 'jj2196' and friendship_status = 'Accepted' or friendship_status = 'sent' and relation_type = 'T' or 'F')) and deleted='no' ;
 
 select distinct receiver_name from relationship
 where sender_name = 'jj2196' and friendship_status = 'Accepted' or friendship_status = 'sent' and relation_type = 'T' or 'F';
@@ -90,7 +90,14 @@ DROP COLUMN deleted;
 ALTER TABLE comment
 ADD deleted varchar(30) default 'no';
 
+ALTER TABLE location
+ADD deleted varchar(30) default 'no';
 
+ALTER TABLE likes
+ADD deleted varchar(30) default 'no';
+
+ALTER TABLE wall
+ADD access_id varchar(30) default 'P';
 
 
 SELECT * FROM comment WHERE post_id='post_2' and (access_id = 'P' or access_id= 'F') and deleted='no' ORDER BY comment_date ASC;
@@ -110,3 +117,13 @@ call  multimedia_contents;
 call  comment;
 call  location;
 call likes;
+
+
+
+select count(post_id) as tot_post from wall where profile_name='jj2196' and deleted='no';
+
+select count(l.like_id) as like_count from likes as l natural join wall  as w 
+where l.post_id=w.post_id and w.profile_name='jj2196' and w.deleted='no';
+
+
+UPDATE likes SET deleted='yes' WHERE like_id='like_1';

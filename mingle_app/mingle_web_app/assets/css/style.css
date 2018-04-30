@@ -233,7 +233,23 @@ textarea:focus {
 	margin: 0;
 }
 
+.comment_unlike {
+	background-color: transparent;
+	border: none;
+	font-size: 14px;
+	color: #3498db;
+	padding: 0;
+	height: auto;
+	width: auto;
+	margin: 0;
+}
 .like_value {
+	display: inline;
+	font-size: 14px;
+}
+
+
+.unlike_value {
 	display: inline;
 	font-size: 14px;
 }
@@ -288,7 +304,7 @@ textarea:focus {
 	background-color: #3498db;
 }
 .deep_blue {
-	background-color: #0043f0;
+	background-color: #d8dade;
 }
 
 .profile_left input[type="submit"] {

@@ -23,9 +23,9 @@ class Post
         else
             $start = ($page - 1) * $limit;
         
-        $post_query = "select * from wall where profile_name = '$userLoggedIn' and deleted= 'no'or profile_name in (select distinct receiver_name from relationship
-where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friendship_status = 'sent' and (relation_type = 'T' or 'F')
-) and deleted='no' order by post_id desc;";
+        $post_query = "select * from wall where profile_name = '$userLoggedIn' and (access_id = 'T' or access_id='P') and deleted= 'no'or (profile_name in (select distinct receiver_name from relationship
+where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friendship_status = 'sent' and (relation_type = 'T' or relation_type = 'F')
+) and deleted='no' and (access_id = 'T' or access_id='P')) order by post_id desc;";
         // $post_query = "CALL post_retrieval('". $userLoggedIn ."')";
         
         $str = ""; // String to return
@@ -60,7 +60,7 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 }
                 
                 if ($userLoggedIn == $added_by)
-                    $delete_button = "<button class='delete_button btn-danger' id='$id'>X</button>";
+                    $delete_button = "<button class='delete_button btn-danger' id='post$id'>X</button>";
                 else
                     $delete_button = "";
                 
@@ -72,16 +72,16 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 // echo("<script>console.log(".$last_name.");</script>");
                 
                 ?>
-<script> 
+<script>
 						function toggle<?php echo $id; ?>() {
 
 							var target = $(event.target);
 							if (!target.is("a")) {
 								var element = document.getElementById("toggleComment<?php echo $id; ?>");
 
-								if(element.style.display == "block") 
+								if(element.style.display == "block")
 									element.style.display = "none";
-								else 
+								else
 									element.style.display = "block";
 							}
 						}
@@ -109,6 +109,23 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 if ($multimedia_check_num > 0) {
                     $multimedia_title = $multimedia_record['multimedia_name'];
                     $multmedia_content = $multimedia_record['multimedia_content'];
+                }
+                
+                
+                //Adding location content
+                
+                
+                $location_check = mysqli_query($this->con, "SELECT * FROM  location WHERE post_id='$id' and deleted='no'");
+                $location_record = mysqli_fetch_array( $location_check);
+                $location_check_num = mysqli_num_rows($location_check);
+                echo ("<script>console.log(" .  $location_check_num . ");</script>");
+                $lat = '';
+                $lng = '';
+                $load_map='';
+                if ($location_check_num > 0) {
+                    $lat = $location_record['latitude'];
+                    $lng = $location_record['longitude'];
+                    $load_map = "<img src=\"https://maps.google.com/maps/api/staticmap?key=AIzaSyCunzdo1_yMI0LzjMHZiw8KkEa9UDBsV7s&center=".$lat.",".$lng."&zoom=8&size=400x300&sensor=false\" style=\"width: 400px; height: 400px;\" />";
                 }
                 
                 // Timeframe
@@ -174,12 +191,13 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
 									<br>
 									<br>$multimedia_title
                                      <br>$multmedia_content
-									<br>
+                                     
+									<br>$load_map
 						  </div>
 
 				          <div class='newsfeedPostOptions'>
 								     Comments($comments_check_num)&nbsp;&nbsp;&nbsp;
-									<iframe src='like.php?post_id=$id' scrolling='no'></iframe>
+									<iframe src='like.php?post_id=$id' scrolling='no'></iframe>&nbsp;&nbsp;&nbsp;
 						</div>
 
 						</div>
@@ -191,10 +209,9 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 ?>
 <script>
 
-					$(document).ready(function() {
+$(document).ready(function() {
 
 						$('#post<?php echo $id; ?>').on('click', function() {
-							console.log('Inside the delete callback");
 							bootbox.confirm("Are you sure you want to delete this post?", function(result) {
 
 								$.post("includes/form_handlers/delete_post.php?post_id=<?php echo $id; ?>", {result:result});
@@ -208,7 +225,7 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
 
 					});
 
-			</script>
+</script>
 <?php
             } // End while loop
             
@@ -223,8 +240,9 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
     }
 
     // Mingle
-    public function submitPost($body, $user_to)
+    public function submitPost($body, $user_to,$privacy)
     {
+        echo ("<script>console.log(Tesing for the submit post" . $body . ");</script>");
         $body = strip_tags($body); // removes html tags
         $body = mysqli_real_escape_string($this->con, $body);
         $check_empty = preg_replace('/\s+/', '', $body); // Deltes all spaces
@@ -245,16 +263,21 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
             }
             
             $body = implode(" ", $body_array);
-            echo ("<script>console.log(" . $body . ");</script>");
+            echo ("<script>console.log(Tesing for the submit post" . $body . ");</script>");
+            
+            echo ("<script>console.log(user tooo..." . $user_to . ");</script>");
+            
             // Current date and time
             $date_added = date("Y-m-d H:i:s");
             // Get username
             $added_by = $this->user_obj->getUsername();
             
+            echo ("<script>console.log(user from..." . $added_by . ");</script>");
             // If user is on own profile, user_to is 'none'
             if ($user_to == $added_by)
                 $user_to = $added_by;
-            
+             
+                
             // Inserting into wall
             $count_query = mysqli_query($this->con, "select count(*)  as curr_tot from wall");
             
@@ -262,8 +285,8 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
             
             $post_id = 'post_' . ++ $row['curr_tot'];
             
-            $query = mysqli_query($this->con, "INSERT INTO post VALUES('$post_id', '$date_added','','$body','P')");
-            $add_post_to_wall = mysqli_query($this->con, "INSERT INTO wall VALUES('$post_id','$user_to','no')");
+            $query = mysqli_query($this->con, "INSERT INTO post VALUES('$post_id', '$date_added','','$body','$privacy')");
+            $add_post_to_wall = mysqli_query($this->con, "INSERT INTO wall VALUES('$post_id','$user_to','no','$privacy')");
             
             // Insert to Post table
             
@@ -340,8 +363,14 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
             $start = ($page - 1) * $limit;
         
         $str = ""; // String to return
-        echo ("<script>console.log(" . $profileUser . ");</script>");
-        $post_query = "select * from wall where profile_name = '$profileUser' and deleted= 'no' order by post_id DESC;";
+        echo ("<script>console.log(this is profile" . $profileUser . ");</script>");
+        echo ("<script>console.log(this is user" . $userLoggedIn . ");</script>");
+        if($profileUser == $userLoggedIn) {
+            $post_query = "select * from wall where profile_name = '$userLoggedIn' and deleted= 'no' order by post_id DESC;";
+        } else {
+            $post_query = "select * from wall where profile_name = '$profileUser' and deleted= 'no' and (access_id='T' or access_id = 'P') order by post_id DESC;";
+        }
+        
         
         $data_query = mysqli_query($this->con, $post_query);
         
@@ -374,7 +403,7 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 }
                 
                 if ($userLoggedIn == $added_by)
-                    $delete_button = "<button class='delete_button btn-danger' id='$id'>X</button>";
+                    $delete_button = "<button class='delete_button btn-danger' id='post$id'>X</button>";
                 else
                     $delete_button = "";
                 
@@ -386,16 +415,16 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 // echo("<script>console.log(".$last_name.");</script>");
                 
                 ?>
-<script> 
+<script>
 						function toggle<?php echo $id; ?>() {
 
 							var target = $(event.target);
 							if (!target.is("a")) {
 								var element = document.getElementById("toggleComment<?php echo $id; ?>");
 
-								if(element.style.display == "block") 
+								if(element.style.display == "block")
 									element.style.display = "none";
-								else 
+								else
 									element.style.display = "block";
 							}
 						}
@@ -423,6 +452,23 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 if ($multimedia_check_num > 0) {
                     $multimedia_title = $multimedia_record['multimedia_name'];
                     $multmedia_content = $multimedia_record['multimedia_content'];
+                }
+               
+                
+                //Adding location content
+                
+                
+                $location_check = mysqli_query($this->con, "SELECT * FROM  location WHERE post_id='$id' and deleted='no'");
+                $location_record = mysqli_fetch_array( $location_check);
+                $location_check_num = mysqli_num_rows($location_check);
+                echo ("<script>console.log(" .  $location_check_num . ");</script>");
+                $lat = '';
+                $lng = '';
+                $load_map='';
+                if ($location_check_num > 0) {
+                    $lat = $location_record['latitude'];
+                    $lng = $location_record['longitude'];
+                    $load_map = "<img src=\"https://maps.google.com/maps/api/staticmap?key=AIzaSyCunzdo1_yMI0LzjMHZiw8KkEa9UDBsV7s&center=".$lat.",".$lng."&zoom=8&size=400x300&sensor=false\" style=\"width: 400px; height: 400px;\" />";
                 }
                 
                 // Timeframe
@@ -473,7 +519,7 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                         $time_message = $interval->s . " seconds ago";
                     }
                 }
-                
+               
                 $str .= "<div class='status_post' onClick='javascript:toggle$id()'>
 					       <div class='post_profile_pic'>
 						      <img src='$profile_pic' width='50'>
@@ -483,15 +529,16 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
 							     <a href='$added_by'> $first_name $last_name </a> &nbsp;&nbsp;&nbsp;$time_message
 									$delete_button
 						   </div>
-                            
+
                            <div id='post_body'>
                                         $post_desc
 									<br>
 									<br>$multimedia_title
-                                     <br>$multmedia_content
-									<br>
+                                     <br>$multmedia_content                                                         
+									<br>$load_map
+                                    
 						  </div>
-						  
+
 
 				          <div class='newsfeedPostOptions'>
 								     Comments($comments_check_num)&nbsp;&nbsp;&nbsp;
@@ -507,24 +554,23 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
                 ?>
 <script>
 
-					$(document).ready(function() {
+                					$(document).ready(function() {
 
-						$('#post<?php echo $id; ?>').on('click', function() {
-							console.log('Inside the delete callback");
-							bootbox.confirm("Are you sure you want to delete this post?", function(result) {
+                						$('#post<?php echo $id; ?>').on('click', function() {
+                							bootbox.confirm("Are you sure you want to delete this post?", function(result) {
 
-								$.post("includes/form_handlers/delete_post.php?post_id=<?php echo $id; ?>", {result:result});
+                								$.post("includes/form_handlers/delete_post.php?post_id=<?php echo $id; ?>", {result:result});
 
-								if(result)
-									location.reload();
+                								if(result)
+                									location.reload();
 
-							});
-						});
+                							});
+                						});
 
 
-					});
+                					});
 
-			</script>
+                				</script>
 <?php
             } // End while loop
             
@@ -536,6 +582,39 @@ where sender_name = '$userLoggedIn' and friendship_status = 'Accepted' or friend
         }
         
         echo $str;
+    }
+
+    public function submitLocationPost($data, $user)
+    {
+        echo ("<script>console.log(In submitLocationPost function" . ");</script>");
+        $lat = $data['latitude'];
+        $lng = $data['longitude'];
+        echo ("<script>console.log(In submitLocationPost function.$lat);</script>");
+        $user_to = $user;
+        
+        $date_added = date("Y-m-d H:i:s");
+        
+        $count_query = mysqli_query($this->con, "select count(*)  as curr_tot from wall");
+        $row = mysqli_fetch_array($count_query);
+        
+        $post_id = 'post_' . ++ $row['curr_tot'];
+        
+        echo ("<script>console.log($post_id);</script>");
+        
+        
+        $query = mysqli_query($this->con, "INSERT INTO post VALUES('$post_id', '$date_added','','You shared location at..','P')");
+        $add_post_to_wall = mysqli_query($this->con, "INSERT INTO wall VALUES('$post_id','$user_to','no','P')");
+        
+        # Inserting into location table
+        $count_location_row = mysqli_query($this->con, "select count(*)  as curr_tot from location");
+        $row = mysqli_fetch_array($count_location_row);
+        $loc_id = 'loc_'. ++ $row['curr_tot'];
+        
+        
+        
+        $add_location_sql=mysqli_query($this->con,"INSERT INTO location VALUES('$loc_id','$post_id','Location from map','','$lat','$lng','P','no')");
+        
+        
     }
 }
 ?>

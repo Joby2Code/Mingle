@@ -4,6 +4,31 @@ include("includes/header.php"); //Header
 
 <div class="main">
 	<div class="content_resize">
+	
+	<div class="user_details column">
+			<a href="<?php echo $userLoggedIn; ?>">
+				<img src="<?php echo $user['profile_pic']; ?>">
+			</a>
+
+			<div class="user_details_left_right">
+				<a href="<?php echo $userLoggedIn; ?>">
+			<?php
+echo $user['first_name'] . " " . $user['last_name'];
+
+?>
+			</a>
+				<br>
+			<?php
+
+			echo "Posts: " . $post['tot_post'] . "<br>";
+			echo "Likes: " . $likes['like_count'];
+
+?>
+		</div>
+		</div>
+	
+	
+	
 	<div class="main_column column">
 	<h4>Friend Requests</h4>
 
@@ -48,6 +73,7 @@ include("includes/header.php"); //Header
 
 	?>
 	<h4>Friend list</h4>
+	<div>
 	<?php 
 		$receiverquery = mysqli_query($con, "SELECT * FROM relationship WHERE receiver_name='$userLoggedIn' AND friendship_status= 'Accepted'");
 		$senderquery = mysqli_query($con, "SELECT * FROM relationship WHERE sender_name='$userLoggedIn' AND friendship_status= 'Accepted'");
@@ -57,30 +83,92 @@ include("includes/header.php"); //Header
 			while($row = mysqli_fetch_array($receiverquery)) {
 				$user_from = $row['receiver_name'];
 				$user_from_obj = new User($con, $user_from);
-				echo $user_from_obj->getFirstAndLastName() . "<br>";
-
+				$user_query = mysqli_query($con,"SELECT * FROM registered_employee WHERE profile_name='$user_from'");
+				$row = mysqli_fetch_array($user_query);
+				
+				echo "<br><div class='search_result'>
+	    
+	    
+					<div class='result_profile_pic'>
+						<a href='" . $row['profile_name'] ."'><img src='". $row['profile_pic'] ."' style='height: 100px;'></a>
+			    
+					</div>
+		    <a href='" . $row['profile_name'] ."'> " . $row['first_name'] . " " . $row['last_name'] . "
+			    
+				</div>";
 			}
 		}
 		else if(mysqli_num_rows($senderquery) == 0){
 			while($row = mysqli_fetch_array($receiverquery)) {
 				$user_from = $row['sender_name'];
 				$user_from_obj = new User($con, $user_from);
-				echo $user_from_obj->getFirstAndLastName() . "<br>";
+				$user_query = mysqli_query($con,"SELECT * FROM registered_employee WHERE profile_name='$user_from'");
+				$row = mysqli_fetch_array($user_query);
+				
+				echo "<br><div class='search_result'>
+				    
+				    
+					<div class='result_profile_pic'>
+						<a href='" . $row['profile_name'] ."'><img src='". $row['profile_pic'] ."' style='height: 100px;'></a>
+				    
+					</div>
+		    <a href='" . $row['profile_name'] ."'> " . $row['first_name'] . " " . $row['last_name'] . "
+				    
+				</div>";
 			}
 		}
 		else{
 			while($row = mysqli_fetch_array($receiverquery)) {
 				$user_from = $row['sender_name'];
 				$user_from_obj = new User($con, $user_from);
-				echo $user_from_obj->getFirstAndLastName() . "<br>"; 
+				
+				
+				
+				$user_query = mysqli_query($con,"SELECT * FROM registered_employee WHERE profile_name='$user_from'");
+				$row = mysqli_fetch_array($user_query);
+				
+				echo "<br><div class='search_result'>
+			    
+			    
+					<div class='result_profile_pic'>
+						<a href='" . $row['profile_name'] ."'><img src='". $row['profile_pic'] ."' style='height: 100px;'></a>
+		    
+					</div>
+		    <a href='" . $row['profile_name'] ."'> " . $row['first_name'] . " " . $row['last_name'] . "
+		    
+				</div>";
+				
+				
+				
+				
 			}
 			while($row = mysqli_fetch_array($senderquery)) {
 				$user_from = $row['receiver_name'];
 				$user_from_obj = new User($con, $user_from);
-				echo $user_from_obj->getFirstAndLastName() . "<br>";
+				
+				
+				
+				
+				
+				
+				
+				$user_query = mysqli_query($con,"SELECT * FROM registered_employee WHERE profile_name='$user_from'");
+				$row = mysqli_fetch_array($user_query);
+				
+				echo "<br><div class='search_result'>
+				    
+				    
+					<div class='result_profile_pic'>
+						<a href='" . $row['profile_name'] ."'><img src='". $row['profile_pic'] ."' style='height: 100px;'></a>
+		        
+					</div>
+		    <a href='" . $row['profile_name'] ."'> " . $row['first_name'] . " " . $row['last_name'] . "
+					    
+				</div>";
 			}
 		}
 	?>
+	</div>
 	</div>
 </div>
 </div>

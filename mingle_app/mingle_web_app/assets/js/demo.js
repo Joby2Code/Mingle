@@ -33,6 +33,11 @@ $(document).ready(function() {
 });
 
 
+
+
+
+
+
 $(document).click(function(e){
 
 	if(e.target.class != "search_results" && e.target.id != "search_text_input") {

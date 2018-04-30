@@ -2,7 +2,8 @@
 include("includes/header.php");
 
 if(isset($_GET['profile_username'])) {
-	$friendship_status = 'None'
+    
+	$friendship_status = 'None';
     $username = $_GET['profile_username'];
     $user_details_query = mysqli_query($con, "SELECT * FROM registered_employee WHERE profile_name='$username'");
     $user_array = mysqli_fetch_array($user_details_query);
@@ -30,7 +31,7 @@ if(isset($_GET['profile_username'])) {
 	 	}
 
  	</style>
- 	
+<script src="https://maps.google.com/maps/api/js?key=AIzaSyBp80QmCKSd5RfUE9S2t3SVe4S1w29S6vs"></script> 	
 <div class="main">
 	<div class="content_resize"> 	
  	
@@ -49,8 +50,9 @@ if(isset($_GET['profile_username'])) {
 				
 		</div>
  		<div>
- 			<p><?php echo "Posts: "  ?></p>
- 			<p><?php echo "Likes: "  ?></p>
+ 	
+ 			<p><?php echo "Posts: ". $post['tot_post'] . "<br>"  ?></p>
+ 			<p><?php echo "Likes: ". $likes['like_count']. "<br>"  ?></p>
  			<p><?php echo "Friends: " ?></p>
  		</div>
 		
@@ -69,7 +71,11 @@ if(isset($_GET['profile_username'])) {
 
     <ul class="nav nav-tabs" role="tablist" id="profileTabs">
       <li role="presentation" class="active"><a href="#newsfeed_div" aria-controls="newsfeed_div" role="tab" data-toggle="tab">Newsfeed</a></li>
-      <li role="presentation"><a href="#messages_div" aria-controls="messages_div" role="tab" data-toggle="tab">About</a></li>
+       <li role="presentation"><a href="#location_div" aria-controls="location_div" id="location_role" role="tab" data-toggle="tab">Location</a></li>
+      <li role="presentation"><a href="#messages_div" aria-controls="messages_div" role="tab" data-toggle="tab">Message</a></li>
+      
+     
+      
     </ul>
 
     <div class="tab-content">
@@ -88,7 +94,7 @@ if(isset($_GET['profile_username'])) {
           echo "<h4>You and <a href='" . $username ."'>" . $user_array['first_name']. "</a></h4><hr><br>";
 
           echo "<div class='loaded_messages' id='scroll_messages'>";
-            echo 'hello';
+            echo 'Lets chat';
           echo "</div>";
         ?>
 
@@ -107,8 +113,19 @@ if(isset($_GET['profile_username'])) {
           div.scrollTop = div.scrollHeight;
         </script>
       </div>	
+    <!-- About end!-->
+    
+      
+   	<div role="tabpanel" class="tab-pane fade" id="location_div"> 
+   	<p id="demo">Click the button to get your position.</p>
+   	<button onclick="getLocation()">Location Finder</button> 
+   	
+	<div id="mapholder"></div>
+	<h4 id="locationstatus"></h4>
+   	</div>
+   	</div>
 
-<!-- About end!-->
+
 
     </div>
 
@@ -146,20 +163,25 @@ if(isset($_GET['profile_username'])) {
       <div class="modal-body">
       	<p>This will appear on the user's profile page and also their newsfeed for your friends to see!</p>
 
-      	<form class="profile_post" action="" method="POST">
-      		<div class="form-group">
-      			<textarea class="form-control" name="post_body"></textarea>
-      			<input type="hidden" name="user_from" value="<?php echo $userLoggedIn; ?>">
-      			<input type="hidden" name="user_to" value="<?php echo $username; ?>">
-      		</div>
-      	</form>
+      	<form class="post_form" action=" " method="POST">
+				<textarea name="post_body" id="post_text"
+					placeholder="Got something to say?"></textarea>
+				<input type="hidden" name="user_from" value="<?php echo $userLoggedIn; ?>">
+      			<input type="hidden" name="user_to" value="<?php echo $username; ?>">	
+				
+				  <input type="submit" name="post" id="submit_profile_post" value="Post"><br>
+				  <input type="radio" name="privacy" value="P" checked> Public
+  				  <input type="radio" name="privacy" value="S"> Private
+  				  <input type="radio" name="privacy" value="T"> Team
+				<br>
+
+
+
+			</form>
       </div>
 
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" name="post_button" id="submit_profile_post">Post</button>
-      </div>
+      
     </div>
   </div>
 </div>
@@ -168,11 +190,23 @@ if(isset($_GET['profile_username'])) {
 
 
 <script>
+
+
+
+
   var userLoggedIn = '<?php echo $userLoggedIn; ?>';
   var profileUsername = '<?php echo $username; ?>';
    console.log(profileUsername);
   $(document).ready(function() {
 
+	  if(userLoggedIn == profileUsername) {
+			$('#location_role').show();
+		} else {
+			$('#location_role').hide();
+		}
+	
+		
+		
     $('#loading').show();
 
     //Original ajax request for loading first posts 
@@ -218,12 +252,13 @@ if(isset($_GET['profile_username'])) {
 
     }); //End (window).scroll(function())
 
+    
 
   });
 
   </script>	
   
-  
+
   <?php
 include 'includes/footer.php';
 ?>
