@@ -19,7 +19,6 @@ if(isset($_POST["submit_pic"])) {
     
     echo ("<script>console.log(In wall" . $img_title . ")</script>");
     $img_title = strip_tags($_POST['image_title']);
-    $img_title = str_replace(' ', '', $img_title); // remove spaces
     echo ("<script>console.log(In upload images" . $img_title . ")</script>");
     
     
