@@ -52,8 +52,7 @@ echo $user['first_name'] . " " . $user['last_name'];
 	<form action="settings.php" method="POST">
 		First Name: <input type="text" name="first_name" value="<?php echo $first_name; ?>" id="settings_input"><br>
 		Last Name: <input type="text" name="last_name" value="<?php echo $last_name; ?>" id="settings_input"><br>
-		Email: <input type="text" name="email" value="<?php echo $email; ?>" id="settings_input"><br>
-
+		
 		<?php echo $message; ?>
 
 		<input type="submit" name="update_details" id="save_details" value="Update Details" class="info settings_submit"><br>
@@ -68,11 +67,6 @@ echo $user['first_name'] . " " . $user['last_name'];
 		<?php echo $password_message; ?>
 
 		<input type="submit" name="update_password" id="save_details" value="Update Password" class="info settings_submit"><br>
-	</form>
-
-	<h4>Close Account</h4>
-	<form action="settings.php" method="POST">
-		<input type="submit" name="close_account" id="close_account" value="Close Account" class="danger settings_submit">
 	</form>
 
 

@@ -1,9 +1,10 @@
 <?php
 include("includes/header.php");
-
+include("includes/class/Message.php");
+$message_obj = new Message($con, $userLoggedIn);
+$friendship_status = 'None';
 if(isset($_GET['profile_username'])) {
     
-	$friendship_status = 'None';
     $username = $_GET['profile_username'];
     $user_details_query = mysqli_query($con, "SELECT * FROM registered_employee WHERE profile_name='$username'");
     $user_array = mysqli_fetch_array($user_details_query);
@@ -15,11 +16,24 @@ if(isset($_GET['profile_username'])) {
 	}
 	else if(mysqli_num_rows($user_received) == 0)
 	{
-		$friendship_status = 'Request sent';
+		$friend_row = mysqli_fetch_array($user_sent);
+		if($friend_row['friendship_status']== "Sent")
+			$friendship_status = 'Request sent';
+		else if($friend_row['friendship_status']== "Denied")
+			$friendship_status = 'Request denied';
+		else 
+			$friendship_status = 'Friend';
 	}
-	else{
-		$friendship_status = 'Respond to request';
-	}
+	else if(mysqli_num_rows($user_sent) == 0){
+		$friend_row = mysqli_fetch_array($user_sent);
+		if($friend_row['friendship_status']== "sent")
+			$friendship_status = 'Respond to request';
+		else if($friend_row['friendship_status']== "Denied")
+			$friendship_status = 'Send request';
+		else 
+			$friendship_status = 'Unfriend';
+		//$friendship_status = 'Respond to request';
+	}	
 }
 
 ?>
@@ -56,11 +70,11 @@ if(isset($_GET['profile_username'])) {
  			<p><?php echo "Friends: " ?></p>
  		</div>
 		
-		
 		<form action="<?php echo $username; ?>" method="POST">
 		</form>
- 		<input type="submit" class="deep_blue" data-toggle="modal" data-target="#post_form" value="Post Something">
-		<input type="submit"  value= <?php echo $friendship_status; ?>>
+ 		<input type="submit" data-toggle="modal" data-target="#post_form" value="Post Something">
+		<font color="white">This</font>
+		<input type="submit" data-toggle="modal" data-target="#friends_form" value= <?php echo $friendship_status; ?>>
 		
  	</div>
  	
@@ -94,16 +108,16 @@ if(isset($_GET['profile_username'])) {
           echo "<h4>You and <a href='" . $username ."'>" . $user_array['first_name']. "</a></h4><hr><br>";
 
           echo "<div class='loaded_messages' id='scroll_messages'>";
-            echo 'Lets chat';
+            echo $message_obj->getMessages($username);
           echo "</div>";
         ?>
 
 
 
         <div class="message_post">
-          <form action="" method="POST">
+          <form action="profile.php" method="POST">
               <textarea name='message_body' id='message_textarea' placeholder='Write your message ...'></textarea>
-              <input type='submit' name='post_message' class='info' id='message_submit' value='Send'>
+              <input type='submit' name='post_message' id='message_submit' value='Send'>
           </form>
 
         </div>
@@ -150,8 +164,7 @@ if(isset($_GET['profile_username'])) {
  	<!-- Loading posts specific to user-->
 
  <!-- Modal -->
-<!-- Modal -->
-<div class="modal fade" id="post_form" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
+ <div class="modal fade" id="post_form" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
 
@@ -178,6 +191,46 @@ if(isset($_GET['profile_username'])) {
 
 
 			</form>
+      </div>
+
+
+      
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="friends_form" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="postModalLabel">Friendship status!</h4>
+      </div>
+
+      <div class="modal-body">
+      	<?php echo $friendship_status."<br><br>";
+			if($friendship_status== "Friend")
+				$text = "You and ".$username." are already friends.";
+			else if($friendship_status== "Request sent")
+				$text = $username." has not accepted your request yet.";
+			else if ($friendship_status == "Respond to request")
+				$text = $username." has sent you a request already.";
+			else if($friendship_status == "Send request"){
+				$relation_type = 'T';
+				$date = date("Y-m-d h:i:sa");
+				$status= 'Sent';
+				$query = "CALL insert_relationship('" . $userLoggedIn . "','" . $username . "','" . $relation_type. "','" . $date . "','" . $status . "')";
+				if(mysqli_query($con, $query))
+				{
+					$text = "Request sent successfully.";
+				}
+			}
+		echo $text;	
+		?>
+
+     
       </div>
 
 
