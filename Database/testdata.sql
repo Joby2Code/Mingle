@@ -45,7 +45,7 @@ call add_to_wall('post_6','ryk123');
 
 call insert_relationship('jj2196','gss383','T','2010-07-22 22:30:12','Accepted');
 call insert_relationship('jj2196','ryk123','T','2012-07-22 22:30:12','Sent');
-call insert_relationship('jj2196','akk198','F','2013-07-22 22:30:12','Declined');
+call insert_relationship('jj2196','akk198','F','2013-07-22 22:30:12','Accepted');
 call insert_relationship('jj2196','pns234','F','2010-07-22 22:30:12','Accepted');
 call insert_relationship('gss383','pns234','T','2010-07-22 22:30:12','Accepted');
 call insert_relationship('ryk123','gss383','T','2010-07-22 22:30:12','Sent');
