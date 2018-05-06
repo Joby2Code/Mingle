@@ -75,7 +75,7 @@ if(isset($_GET['profile_username'])) {
  	
  			<p><?php echo "Posts: ". $post['tot_post'] . "<br>"  ?></p>
  			<p><?php echo "Likes: ". $likes['like_count']. "<br>"  ?></p>
- 			<p><?php echo "Friends: " ?></p>
+ 			
  		</div>
 		
 		<form action="<?php echo $username; ?>" method="POST">
@@ -119,7 +119,7 @@ if(isset($_GET['profile_username'])) {
           echo "<h4>You and <a href='" . $username ."'>" . $user_array['first_name']. "</a></h4><hr><br>";
 
           echo "<div class='loaded_messages' id='scroll_messages'>";
-            echo $message_obj->getMessages($username);
+            echo "Still in Development";
           echo "</div>";
         ?>
 
@@ -230,11 +230,13 @@ if(isset($_GET['profile_username'])) {
 				$text = $username." has sent you a request already.";
 			else if($friendship_status == "Send request"){
 				$relation_type = 'T';
-				$date = date("Y-m-d h:i:sa");
+				$date = date("Y-m-d"); // Current date
 				$status= 'Sent';
 				$query = "CALL insert_relationship('" . $userLoggedIn . "','" . $username . "','" . $relation_type. "','" . $date . "','" . $status . "')";
+				
 				if(mysqli_query($con, $query))
-				{
+				{   
+				   
 					$text = "Request sent successfully.";
 				}
 			}

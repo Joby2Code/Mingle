@@ -3,10 +3,14 @@ if(isset($_POST['update_details'])) {
 
 	$first_name = $_POST['first_name'];
 	$last_name = $_POST['last_name'];
+	$designation = $_POST['designation'];
+	$manager = $_POST['manager'];
+	$skills= $_POST['skills'];
+	$address = $_POST['address'];
 	
 	$matched_user = $userLoggedIn;
 	$message = "Details updated!<br><br>";
-	$query = mysqli_query($con, "UPDATE registered_employee SET first_name='$first_name', last_name='$last_name', email-id='$email' WHERE profile_name='$userLoggedIn'");
+	$query = mysqli_query($con, "UPDATE registered_employee SET first_name='$first_name', last_name='$last_name',designation='$designation',manager='$manager',skills='$skills',address='$address' WHERE profile_name='$userLoggedIn'");
 	
 }
 else 
@@ -34,7 +38,7 @@ if(isset($_POST['update_password'])) {
 				$password_message = "Sorry, your password must be greater than 4 characters<br><br>";
 			}	
 			else {
-				$new_password_md5 = md5($new_password_1);
+				$new_password_md5 = $new_password_1;
 				$password_query = mysqli_query($con, "UPDATE signin SET password='$new_password_md5' WHERE profile_name='$userLoggedIn'");
 				$password_message = "Password has been changed!<br><br>";
 			}

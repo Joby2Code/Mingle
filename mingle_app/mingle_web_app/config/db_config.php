@@ -3,9 +3,8 @@
 // DB configuration
 $server = "127.0.0.1";
 $username = "root";
-$password = "";
 $db = "mingle";
-
+$password = 'password';
 ob_start();
 @
 session_start();
