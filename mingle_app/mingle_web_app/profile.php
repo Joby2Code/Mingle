@@ -3,37 +3,45 @@ include("includes/header.php");
 include("includes/class/Message.php");
 $message_obj = new Message($con, $userLoggedIn);
 $friendship_status = 'None';
+$same_user= false;
 if(isset($_GET['profile_username'])) {
     
     $username = $_GET['profile_username'];
-    $user_details_query = mysqli_query($con, "SELECT * FROM registered_employee WHERE profile_name='$username'");
-    $user_array = mysqli_fetch_array($user_details_query);
-    $user_sent = mysqli_query($con, "SELECT * FROM relationship WHERE sender_name='$username' AND receiver_name='$userLoggedIn'");
-	$user_received = mysqli_query($con, "SELECT * FROM relationship WHERE sender_name='$userLoggedIn' AND receiver_name='$username'");
-	if(mysqli_num_rows($user_sent) == 0 && mysqli_num_rows($user_received) == 0)
+	if($username== $userLoggedIn)
 	{
-		$friendship_status = 'Send request';
+		$same_user= true;
 	}
-	else if(mysqli_num_rows($user_received) == 0)
+	else
 	{
-		$friend_row = mysqli_fetch_array($user_sent);
-		if($friend_row['friendship_status']== "Sent")
-			$friendship_status = 'Request sent';
-		else if($friend_row['friendship_status']== "Denied")
-			$friendship_status = 'Request denied';
-		else 
-			$friendship_status = 'Friend';
-	}
-	else if(mysqli_num_rows($user_sent) == 0){
-		$friend_row = mysqli_fetch_array($user_sent);
-		if($friend_row['friendship_status']== "sent")
-			$friendship_status = 'Respond to request';
-		else if($friend_row['friendship_status']== "Denied")
+		$user_details_query = mysqli_query($con, "SELECT * FROM registered_employee WHERE profile_name='$username'");
+		$user_array = mysqli_fetch_array($user_details_query);
+		$user_sent = mysqli_query($con, "SELECT * FROM relationship WHERE sender_name='$username' AND receiver_name='$userLoggedIn'");
+		$user_received = mysqli_query($con, "SELECT * FROM relationship WHERE sender_name='$userLoggedIn' AND receiver_name='$username'");
+		if(mysqli_num_rows($user_sent) == 0 && mysqli_num_rows($user_received) == 0)
+		{
 			$friendship_status = 'Send request';
-		else 
-			$friendship_status = 'Unfriend';
+		}
+		else if(mysqli_num_rows($user_received) == 0)
+		{
+			$friend_row = mysqli_fetch_array($user_sent);
+			if($friend_row['friendship_status']== "Sent")
+				$friendship_status = 'Request sent';
+			else if($friend_row['friendship_status']== "Denied")
+				$friendship_status = 'Request denied';
+			else 
+				$friendship_status = 'Friend';
+		}
+		else if(mysqli_num_rows($user_sent) == 0){
+			$friend_row = mysqli_fetch_array($user_sent);
+			if($friend_row['friendship_status']== "sent")
+				$friendship_status = 'Respond to request';
+			else if($friend_row['friendship_status']== "Denied")
+				$friendship_status = 'Send request';
+			else 
+				$friendship_status = 'Friends';
 		//$friendship_status = 'Respond to request';
-	}	
+		}
+	}
 }
 
 ?>
@@ -74,8 +82,11 @@ if(isset($_GET['profile_username'])) {
 		</form>
  		<input type="submit" data-toggle="modal" data-target="#post_form" value="Post Something">
 		<font color="white">This</font>
-		<input type="submit" data-toggle="modal" data-target="#friends_form" value= <?php echo $friendship_status; ?>>
-		
+		<?php if(!$same_user)
+		{ ?>
+			<input type="submit" data-toggle="modal" data-target="#friends_form" value= <?php echo $friendship_status; ?>>
+		<?php 
+		} ?>
  	</div>
  	
  	
