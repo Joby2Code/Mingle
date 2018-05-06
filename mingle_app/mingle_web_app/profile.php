@@ -81,7 +81,7 @@ if(isset($_GET['profile_username'])) {
 		<form action="<?php echo $username; ?>" method="POST">
 		</form>
  		<input type="submit" data-toggle="modal" data-target="#post_form" value="Post Something">
-		<font color="white">This</font>
+		
 		<?php if(!$same_user)
 		{ ?>
 			<input type="submit" data-toggle="modal" data-target="#friends_form" value= <?php echo $friendship_status; ?>>
@@ -119,25 +119,64 @@ if(isset($_GET['profile_username'])) {
           echo "<h4>You and <a href='" . $username ."'>" . $user_array['first_name']. "</a></h4><hr><br>";
 
           echo "<div class='loaded_messages' id='scroll_messages'>";
-            echo "Still in Development";
-          echo "</div>";
-        ?>
-
-
-
-        <div class="message_post">
-          <form action="profile.php" method="POST">
-              <textarea name='message_body' id='message_textarea' placeholder='Write your message ...'></textarea>
-              <input type='submit' name='post_message' id='message_submit' value='Send'>
-          </form>
-
-        </div>
-
-        <script>
-          var div = document.getElementById("scroll_messages");
-          div.scrollTop = div.scrollHeight;
-        </script>
-      </div>	
+            
+          
+        
+		$query="select * from messages where receiver='$username' AND sender= '$userLoggedIn' AND seen='F'";
+		$result=mysqli_query($con,$query);
+		if(mysqli_num_rows($result)>0)
+		{	
+			while($row=mysqli_fetch_assoc($result))
+			{	
+		
+				echo "<div style=font-weight:bold><h5><strong>".$row["message"]."</strong></h5></div>";
+					$seenMessage="update messages set seen='T' where receiver='$username' AND sender= '$userLoggedIn'";
+					$resultseen =mysqli_query($con,$seenMessage);
+					echo "<form method=post >
+					<input type='hidden' name='message_id' value=1>
+					<input type='hidden' name='sender' value=".$row["sender"].">
+					<input type='hidden' name='receiver' value=".$row["receiver"].">
+					<textarea rows=10 cols=80 name=reply_message></textarea>
+					<input type=submit name=reply value=Send>
+					<input type=submit name=end_conv value=Delete>
+					</form> ";	
+			}
+		}
+		else{
+			echo "<div style=font-weight:bold><h5><strong>'No new messages' </strong></h5></div>";
+			echo "<form method=post >
+					<input type='hidden' name='message_id' value=2>
+					<input type='hidden' name='sender' value=".$userLoggedIn.">
+					<input type='hidden' name='receiver' value=".$username.">
+					<textarea rows=10 cols=80 name=reply_message></textarea>
+					<input type=submit name=reply value=Send>
+					<input type=submit name=end_conv value=Delete>
+					</form> ";
+		}
+		
+	?>	
+	<?php
+		if(isset($_POST["reply"]))
+		{
+			$checker= $_POST["message_id"];
+			$query="select * from messages where receiver='$userLoggedIn' AND sender= '$username'";
+			$result=mysqli_query($con,$query);
+			if(mysqli_num_rows($result)>0){
+			
+				$query1="update messages set message='$_POST[reply_message]' where receiver='$userLoggedIn' AND sender= '$username'";
+				$result1=mysqli_query($con,$query1);
+				$message = "Message sent";
+				echo "<script type='text/javascript'>alert('$message');</script>";
+			}
+			else{
+				$query1="insert into messages values('$username','$userLoggedIn','$_POST[reply_message]','F')";
+				$result1=mysqli_query($con,$query1);
+				$message = "Message sent";
+				echo "<script type='text/javascript'>alert('$message');</script>";
+			}
+		}
+	echo "</div></div>";
+?>
     <!-- About end!-->
     
       
@@ -170,7 +209,7 @@ if(isset($_GET['profile_username'])) {
  	</div>
 </div>
  	
- 	
+</div> 	
  	
  	<!-- Loading posts specific to user-->
 

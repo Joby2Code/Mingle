@@ -127,3 +127,20 @@ where l.post_id=w.post_id and w.profile_name='jj2196' and w.deleted='no';
 
 
 UPDATE likes SET deleted='yes' WHERE like_id='like_1';
+
+
+create index bindex on registered_employee(profile_name);
+
+
+select * from likes where post_id='post_101';
+select * from likes;
+
+INSERT INTO likes VALUES('like_31','post_100',null,null,null,'jj2196','2010-07-22 22:30:12','no');
+INSERT INTO likes VALUES('like_32','post_100',null,null,null,'ryk123','2010-07-22 22:30:12','yes');
+
+SELECT count(distinct like_id) as tot_likes FROM likes WHERE post_id='post_94' and deleted='no';
+
+SELECT count(distinct like_id) as tot_likes FROM likes WHERE post_id='post_94' and deleted='yes';
+
+
+SELECT * FROM likes WHERE  post_id='post_100' and viewer_name='gss383';

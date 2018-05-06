@@ -7,10 +7,11 @@ if(isset($_POST['update_details'])) {
 	$manager = $_POST['manager'];
 	$skills= $_POST['skills'];
 	$address = $_POST['address'];
+	$gender = $_POST['gender'];
 	
 	$matched_user = $userLoggedIn;
 	$message = "Details updated!<br><br>";
-	$query = mysqli_query($con, "UPDATE registered_employee SET first_name='$first_name', last_name='$last_name',designation='$designation',manager='$manager',skills='$skills',address='$address' WHERE profile_name='$userLoggedIn'");
+	$query = mysqli_query($con, "UPDATE registered_employee SET first_name='$first_name', last_name='$last_name',designation='$designation',manager='$manager',skills='$skills',address='$address',gender='$gender' WHERE profile_name='$userLoggedIn'");
 	
 }
 else 
