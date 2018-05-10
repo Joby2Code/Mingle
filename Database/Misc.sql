@@ -32,7 +32,7 @@ where profile_name = 'test';
 
 
 
-call insert_employee(1111111111,'test@nyu.edu');
+call insert_employee(999999999,'jj2197@nyu.edu');
 
 
 
@@ -52,9 +52,9 @@ select * from wall;
 
 #Query selects all the post to be displayed on the wall of the user and his friends
 select * from wall
-where profile_name = 'jj2196'  and (access_id = 'T' or access_id='P') and deleted='no' or (profile_name in 
+where profile_name = 'jj2196' and deleted ='no' or profile_name in 
 (select distinct receiver_name from relationship
-where sender_name = 'jj2196' and friendship_status = 'Accepted' or friendship_status = 'sent' and relation_type = 'T' or 'F') and deleted='no'  and (access_id = 'T' or access_id='P'));
+where sender_name = 'jj2196' and friendship_status = 'Accepted' or friendship_status = 'sent' and relation_type = 'T' or 'F') and deleted='no';
 
 select distinct receiver_name from relationship
 where sender_name = 'jj2196' and friendship_status = 'Accepted' or friendship_status = 'sent' and relation_type = 'T' or 'F';
@@ -74,7 +74,7 @@ select count(distinct like_id) as tot_likes,viewer_name from likes where post_id
 
 
 select * from likes;
-select * from wall where profile_name='jj2196' and deleted='no';
+select * from wall;
 
 INSERT INTO likes VALUES('like_11','post_1',null,null,null,'jj2196',' 2018-02-02 09:10:30');
 
@@ -90,15 +90,10 @@ DROP COLUMN deleted;
 ALTER TABLE comment
 ADD deleted varchar(30) default 'no';
 
-ALTER TABLE location
+
+
+ALTER TABLE multimedia_content
 ADD deleted varchar(30) default 'no';
-
-ALTER TABLE likes
-ADD deleted varchar(30) default 'no';
-
-ALTER TABLE wall
-ADD access_id varchar(30) default 'P';
-
 
 SELECT * FROM comment WHERE post_id='post_2' and (access_id = 'P' or access_id= 'F') and deleted='no' ORDER BY comment_date ASC;
 
@@ -120,27 +115,4 @@ call likes;
 
 
 
-select count(post_id) as tot_post from wall where profile_name='jj2196' and deleted='no';
-
-select count(l.like_id) as like_count from likes as l natural join wall  as w 
-where l.post_id=w.post_id and w.profile_name='jj2196' and w.deleted='no';
-
-
-UPDATE likes SET deleted='yes' WHERE like_id='like_1';
-
-
-create index bindex on registered_employee(profile_name);
-
-
-select * from likes where post_id='post_101';
-select * from likes;
-
-INSERT INTO likes VALUES('like_31','post_100',null,null,null,'jj2196','2010-07-22 22:30:12','no');
-INSERT INTO likes VALUES('like_32','post_100',null,null,null,'ryk123','2010-07-22 22:30:12','yes');
-
-SELECT count(distinct like_id) as tot_likes FROM likes WHERE post_id='post_94' and deleted='no';
-
-SELECT count(distinct like_id) as tot_likes FROM likes WHERE post_id='post_94' and deleted='yes';
-
-
-SELECT * FROM likes WHERE  post_id='post_100' and viewer_name='gss383';
+SELECT * FROM  multimedia_content WHERE post_id='post_17';

@@ -9,6 +9,7 @@ call insert_employee(407840577,'akk198@nyu.edu');
 call insert_employee(940237837,'ryk123@nyu.edu');
 call insert_employee(379486342,'gpn967@nyu.edu');
 call insert_employee(1111111111,'test@nyu.edu');
+call insert_employee(888888888,'stv@nyu.edu');
 
 
 call insert_signin_details(742347663,'password','jj2196');
@@ -49,6 +50,8 @@ call insert_relationship('jj2196','akk198','F','2013-07-22 22:30:12','Accepted')
 call insert_relationship('jj2196','pns234','F','2010-07-22 22:30:12','Accepted');
 call insert_relationship('gss383','pns234','T','2010-07-22 22:30:12','Accepted');
 call insert_relationship('ryk123','gss383','T','2010-07-22 22:30:12','Sent');
+call insert_relationship('gss383','ryk123','T','2010-07-22 22:30:12','Accepted');
+CALL insert_relationship('gss383','gss383','T','2018-05-04 10:47:12pm','Sent');
 
 call insert_multimedia('mul_1','post_1','Miami Image','jpg',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','S');
 call insert_multimedia('mul_2','post_2','Florida image','jpg',x'C9CBBBCCCEB9C8CABCCCCEB9C9CBBB','P');
